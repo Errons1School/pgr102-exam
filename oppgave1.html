@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oppgave 1 - Kunst</title>
+    <link rel="stylesheet" type="text/css" href="css/oppgave1.css">
+</head>
+<body>
+
+    <!-- Det er lov å endre/legge til HTML -->
+
+    <h1>Modern Art Maker</h1>
+
+    <label>Bredde</label>    
+    <input id="width-txt" type="number">
+
+    <label>Høyde</label>
+    <input id="height-txt" type="number">
+
+    <hr>
+
+    <label>Farge</label>
+    <input id="background-color-txt" type="text">
+
+    <hr>
+
+    <label>Posisjon fra venstre (left)</label>
+    <input id="left-txt" type="number">
+
+    <label>Posisjon fra toppen (top)</label>
+    <input id="top-txt" type="number">
+
+    <hr>
+
+    <input id="add-box-btn" type="button" value="Legg til">
+    <input id="remove-box-btn" type="button" value="Fjern alt">
+
+    <p id="status-p">Antall bokser lagt til: 0</p> 
+
+    <div id="output-div"></div>
+
+
+    <script>
+        // Variabler som innebærer verdier til boksen vi skal lage
+        var inptWidth = document.getElementById("width-txt");
+        var inptHeight = document.getElementById("height-txt");
+        var inptBackgroundcolor = document.getElementById("background-color-txt");
+        var inptPositionLeft = document.getElementById("left-txt");
+        var inptPosistionTop = document.getElementById("top-txt"); 
+
+        // Resterende varibaler av HTML elementer
+        var btnAddBox = document.getElementById("add-box-btn");
+        var btnRemoveBox = document.getElementById("remove-box-btn");
+        var statusP = document.getElementById("status-p");
+        var outputDiv = document.getElementById("output-div"); 
+
+        // Variabler vi trenger verdier for til koden, benyttes kun til telling.
+        var statusCounter = 0;
+        var divBoxId = 0;
+
+        // Dette er hovedfunksjonen, henter alle verdier fra siden og lager boks
+        // Eller gir beskjed at man må fylle ut alle boksene på forveien.
+        function printBox(){
+            var width = inptWidth.value;
+            var height = inptHeight.value;
+            var backgroundColor = inptBackgroundcolor.value;
+            var positionLeft = inptPositionLeft.value;
+            var positionTop = inptPosistionTop.value; 
+
+            // Hvis alle boksene er fylt ut med riktig verdi så lager den boks og oppdatere boks status
+            if (width && height && backgroundColor && positionLeft && positionTop){
+
+                outputDiv.innerHTML += `
+                    <div id="${divBoxId}"></div>
+                `;
+                
+                var divStyler = document.getElementById(`${divBoxId}`);
+                divStyler.style.width = `${width}px`; 
+                divStyler.style.height = `${height}px`;
+                divStyler.style.backgroundColor = backgroundColor;
+                divStyler.style.left = `${positionLeft}px`;
+                divStyler.style.top = `${positionTop}px`;
+                
+                divBoxId ++;
+                updateStatus(true)
+            }
+            // Hvis noen av bokser mangler før man bare beskjed om å fylle ut alle boksene 
+            else {
+                updateStatus(false)
+            }
+        }
+
+        // Funksjon som gir ut statys på html element status-p
+        function updateStatus(status){
+            if (status){
+                statusCounter ++;
+                statusP.innerHTML = `
+                Antall bokser lagt til: ${statusCounter}
+            `;
+            }else{
+                statusP.innerHTML = `
+                Då må fylle inn alle boksene! <br>
+                Antall bokser lagt til: ${statusCounter}
+            `;
+            }
+        }
+
+        // Fjerner alle boksene på skjermen
+        function removeAllBoxes(){
+            statusCounter = 0;
+            divBoxId = 0;
+            statusP.innerHTML = `
+                Antall bokser lagt til: ${statusCounter}
+            `;
+            outputDiv.innerHTML = ``;
+
+        }
+
+        // Linker knappene til ønsked funksjon
+        btnAddBox.onclick = printBox;
+        btnRemoveBox.onclick = removeAllBoxes;
+
+    </script>
+    
+    </body>
+</html>

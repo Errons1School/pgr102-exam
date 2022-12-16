@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oppgave 2 - Dragracing</title>
+    <link rel="stylesheet" href="css/oppgave2.css">
+    <style>
+        #start-btn{
+            top: 400px;
+        }
+        #reset-btn{
+            top: 500px;
+        }
+        input{
+            z-index: 999;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 50px;
+            font-size: larger;
+        }
+        img{
+            transform: left 2s;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Dragracing</h1>
+
+    <input id="start-btn" type="button" value="Start">
+    <input id="reset-btn" type="button" value="Still tilbake">
+
+    <div id="road-div"></div>
+    
+    <img id="blue-car" src="images/blue-car.png">
+    <img id="green-car" src="images/green-car.png">
+    <img id="red-car" src="images/red-car.png">
+
+    <div id="finish-line"></div>
+
+    <div id="output-div"></div>
+
+    <script>
+
+        var carBluePng = document.getElementById("blue-car");
+        var carGreenPng = document.getElementById("green-car");
+        var carRedPng = document.getElementById("red-car");
+        
+        var btnStart = document.getElementById("start-btn");
+        var btnReset = document.getElementById("reset-btn")
+        var outputDiv = document.getElementById("output-div");
+
+        var interval;
+        var arrayCar = [
+            ["Blå", 0, carBluePng],
+            ["Grønn", 0, carGreenPng],
+            ["Rød", 0, carRedPng],
+        ]
+
+        // Funksjon for å gi interval ID og starte dragracing()
+        function startRace(){
+            dragracing();
+            interval = setInterval( dragracing, 2000 );
+        }
+
+        // Får biler til å bevege på seg, oppdatere om løpet er aktivt eller ei
+        function dragracing(){
+
+            // Først loop gir tilfeldig lengde for bilen å kjøre
+            for (let index = 0; index < arrayCar.length; index++) {
+                var length = Math.floor(Math.random()*200);
+                arrayCar[index][1] = arrayCar[index][1] + length;
+                
+                if (arrayCar[index][1] < 700){
+                    var race = true;
+                }else{
+                    var race = false;
+                    break;
+                }
+            }
+
+            // Andre loop beveger selve bilen
+            for (let index = 0; index < arrayCar.length; index++) {
+                arrayCar[index][2].style.left = `${arrayCar[index][1]}px`;
+            }
+
+            // Tredje loop sjekker om noen har vinner kriteriet og avslutter funksjonsloopen
+            if (race === false){
+                for (let index = 0; index < arrayCar.length; index++) {
+                    if (arrayCar[index][1] >= 700){
+                        outputDiv.innerHTML = `
+                            ${arrayCar[index][0]} bil vant!
+                        `;
+                        clearInterval(interval);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Stiller alt tilbake for å spille på nytt
+        function restart(){
+            clearInterval(interval);
+            arrayCar = [
+                ["Blå", 0, carBluePng],
+                ["Grønn", 0, carGreenPng],
+                ["Rød", 0, carRedPng],
+            ]
+
+            for (let index = 0; index < arrayCar.length; index++) {
+                arrayCar[index][2].style.left = `${arrayCar[index][1]}px`;
+            }
+
+            outputDiv.innerHTML = ``;
+        }
+
+        btnStart.onclick = startRace;
+        btnReset.onclick = restart;
+
+    </script>
+
+</body>
+</html>

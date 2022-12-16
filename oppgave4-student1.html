@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oppgave 4-2 - Student 1</title>
+    <link rel="stylesheet" href="css/oppgave4-student1.css">
+</head>
+<body>
+    
+    <!-- 
+                            ~~~~~~~~~~ VIKTIG!!! ~~~~~~~~~~
+        Jeg har valgt oppgave 4-2.
+        Jeg er kun en student som gjør denne eksamen og kommer kun å gjøre en oppg. 
+        OBS! OBS! I denne oppgaven har jeg benyttet ekstern .CSS dokument.
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     -->
+
+     <h1><strong>Minnespill</strong></h1>
+     <input id="start-btn" type="button" value="Klikke her for å starte nytt spill!"> <br>
+     
+     <div id="output-div"></div>
+     
+     <span>Gjenta ditt nummer her</span>
+     <input id="user-number" type="number">
+     <input id="compare-number" type="button" value="Sammenlign">
+
+     <script>
+
+        var btnStart = document.getElementById("start-btn");
+        var btnCompare = document.getElementById("compare-number");
+        var inptUserNumber = document.getElementById("user-number");
+        var outputDiv = document.getElementById("output-div"); 
+
+        var simulareNumbers = 0;
+        var gameRound = 0;
+        var arrayUserNumber = [];
+        var arrayGameNumber = [];
+
+        // Gjør klar skjermen og alle variabler til nytt spill.
+        function startGame(){
+            gameRound = 0;
+            arrayUserNumber = [];
+            arrayGameNumber = [];
+            clearScreen();
+            makeGameNumbers();
+            showNumbers();
+
+            // Du kommer å se dette flere steder, men en timeout utsetter funksjonen som 
+            // er nevnt i parantesen med tallet bak i ms.  
+            setTimeout(clearScreen, 2000);
+            
+        }
+
+        // Hovedfunksjon som sjekker om du kommer videre eller taper og får opp poengsum.
+        function compareNumber(){
+            // Sammenligner nummere i form av en string
+            if (arrayGameNumber.join("") === inptUserNumber.value){
+                outputDiv.innerHTML = `
+                Gratulere! det var likt! <br>
+                Ny tall om 1 sekund! 
+                `;
+
+                gameRound ++;
+                inptUserNumber.innerHTML = 0;
+                addGameNumber();
+                setTimeout(showNumbers, 1000);
+                setTimeout(clearScreen, 4000);
+            }else {
+                // Gjør input til string og sammenligner hvor mange like man har
+                inptUserNumber = inptUserNumber.value;
+                arrayUserNumber = Array.from(inptUserNumber);
+                clearScreen()
+
+                for (let index = 0; index < arrayGameNumber.length; index++) {
+                    if (arrayGameNumber[index] === parseInt(inptUserNumber[index])){
+                        simulareNumbers ++;
+                    }                
+                }
+
+                outputDiv.innerHTML = `
+                Du tapte, din poengsum ble ${gameRound}! <br>
+                Det ble totalt ${simulareNumbers} like.
+                `;
+
+            }
+
+        }
+
+        function showNumbers(){
+            arrayOutput = arrayGameNumber;
+            outputDiv.innerHTML = arrayOutput.join(``);
+            inptUserNumber.value = ``;
+        }
+
+        function clearScreen(){
+            outputDiv.innerHTML = ``;
+        }
+
+        function makeGameNumbers(){
+            for (let index = 0; index < 3; index++) {
+                arrayGameNumber.push(Math.floor(Math.random()*9));
+            }
+        } 
+
+        function addGameNumber(){
+            arrayGameNumber.push(Math.floor(Math.random()*9));
+        }
+
+        btnStart.onclick = startGame;
+        btnCompare.onclick = compareNumber;
+
+     </script>
+
+
+</body>
+</html>

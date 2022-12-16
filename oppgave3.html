@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oppgave 3 - Middelalderbygninger</title>
+</head>
+<body>
+
+    <!-- Det er lov å endre/legge til HTML -->
+
+    <h1>Middelalderbygninger</h1>
+    <p>Lyst til å bo i en middelalderbygning? Vi har de beste middelalderbygningene! :)</p>
+
+    <input id="show-all-btn" type="button" value="Vis alle">
+    <input id="clear-all-btn" type="button" value="Fjern alle">
+
+    <hr>
+
+    <label>Minimum pris</label>
+    <input id="minimum-price" type="number">
+    <label>Maksimum pris</label>
+    <input id="maximum-price" type="number">
+    <input id="sort-after-money-btn" type="button" value="Vis etter pris">
+
+    <hr>
+
+    <!-- Hint: Å hente value fra valgt <option> fungerer på samme måte som å hente value fra en tekstboks -->
+    <!-- Du endrer på options for å tilpasse til din løsning -->
+    <select id="category-select">
+        <option value="">--Velg kategori--</option>
+        <option value="Bonde">Bonde</option>
+        <option value="Nobel">Nobel</option>
+        <option value="Militært">Militært</option>
+    </select>
+    <input id="sort-after-category" type="button" value="Vis etter kategori">
+
+    <hr>
+
+    <div id="output-div"></div>
+
+
+
+    <script>
+
+        var btnShowAll = document.getElementById("show-all-btn");
+        var btnClearAll = document.getElementById("clear-all-btn");
+        var btnSortAfterMoney = document.getElementById("sort-after-money-btn");
+        var btnSortAfterCategory = document.getElementById("sort-after-category");
+
+        var inptMinPrice = document.getElementById("minimum-price");
+        var inptMaxPrice = document.getElementById("maximum-price");
+        var inptCategory = document.getElementById("category-select");
+
+        var outputDiv = document.getElementById("output-div");
+
+        var arrayHouse = [
+            [
+                name = "Enkelt hus", 
+                price = 50,
+                image = "building-1.png",
+                category = "Bonde",
+            ],
+            [
+                name = "Vanligt hus",
+                price = 150,
+                image = "building-2.png",
+                category = "Bonde",
+            ],
+            [
+                name = "Stort hus",
+                price = 400,
+                image = "building-3.png",
+                category = "Bonde",
+            ],
+            [
+                name = "Nobelt hus",
+                price = 2500,
+                image = "building-4.png",
+                category = "Nobel",
+            ],
+            [
+                name = "Slott",
+                price = 10000,
+                image = "building-5.png",
+                category = "Nobel",
+            ],
+            [
+                name = "Vakt brakke",
+                price = 5000,
+                image = "building-6.png",
+                category = "Militært",
+            ],
+        ]
+
+        // Fjerner alt i outputdiv
+        function clearAll(){
+            outputDiv.innerHTML = ``;
+        }
+
+        // Angir feilmelding avhengi hvor feilen kommer i fra
+        function errorMassage(error){
+            clearAll();
+            if(error === 0){
+                outputDiv.innerHTML = `Venligst angi minimum og maximum pris`;
+            }
+            if(error === 1){
+                outputDiv.innerHTML = `Venligst velg gyldig kategory`;
+            }
+        }
+
+        // en funksjon for å fjerne repiterende tekst.
+        // Returnere en bilde og text til et array treff
+        function text(arrayIndex2, arrayIndex0, arrayIndex1, arrayIndex3){
+            return `
+                <img src="images/${arrayIndex2}">
+                    <p>
+                        <strong>Navn:</strong> ${arrayIndex0} <br>
+                        <strong>Pris:</strong> ${arrayIndex1} Guldmynter <br>
+                        <strong>Kategori:</strong> ${arrayIndex3} <br>
+                    </p><br><br><br><br>
+            `;
+        }
+
+        // Viser alle eiendomenne
+        function showAll(){
+            clearAll();
+
+            for (let index = 0; index < arrayHouse.length; index++) {
+                outputDiv.innerHTML += 
+                text(arrayHouse[index][2],arrayHouse[index][0],arrayHouse[index][1],arrayHouse[index][3]);
+            }
+        }
+
+        // Sortere etter ønsket pengesum
+        function sortAfterMoney(){
+            clearAll();
+            var minPrice = inptMinPrice.value;
+            var maxPrice = inptMaxPrice.value;
+
+            // Sjekker først om det er "ekte" verdi på både min og max pris, hvis ikke print feilmelding
+            if(minPrice && maxPrice){
+                for (let index = 0; index < arrayHouse.length; index++) {
+                    if (arrayHouse[index][1] >= minPrice && arrayHouse[index][1] <= maxPrice){
+                        outputDiv.innerHTML += 
+                        text(arrayHouse[index][2],arrayHouse[index][0],arrayHouse[index][1],arrayHouse[index][3]);
+                    }
+                }
+            }else{
+                errorMassage(0);
+            }
+        }
+
+        // Sortere etter kategori
+        function sortAfterCategory(){
+            clearAll();
+            var category = inptCategory.value;
+
+            // Sjekker flrst om det er en "ekte" verdi på kategori hvis ikke print feilmelding
+            if (category){
+                for (let index = 0; index < arrayHouse.length; index++) {
+                    if (arrayHouse[index][3] === category){
+                        outputDiv.innerHTML += 
+                        text(arrayHouse[index][2],arrayHouse[index][0],arrayHouse[index][1],arrayHouse[index][3]);
+                    }
+                }
+            }else{
+                errorMassage(1);
+            }
+        }
+
+        btnShowAll.onclick = showAll;
+        btnClearAll.onclick = clearAll;
+        btnSortAfterMoney.onclick = sortAfterMoney;
+        btnSortAfterCategory.onclick = sortAfterCategory;
+
+    </script>
+
+</body>
+</html>
